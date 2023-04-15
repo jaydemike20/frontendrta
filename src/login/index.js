@@ -9,7 +9,7 @@ import KeyIcon from '@mui/icons-material/Key';
 import Images from './../Images/people.png'
 import { Button, TextField } from '@mui/material';
 import ForgotPass from './component/ForgotPass';
-
+import axios from '../plugins/axios'
 
 
 function Login() {
@@ -20,8 +20,38 @@ function Login() {
     setActiveTab(tab);
   };
 
+  const [data, setData] = useState({
+    first_name: "",
+    last_name: "",
+    email: "",
+    password: ""
+  })
 
 
+  const handleRegistration = () => {
+
+    axios.post("accounts/users/", data).then(response => {
+
+      alert("Successfully Registered. Please check your email for confirmation")
+      console.log(response.data);
+
+      // NAVIGATE
+      navigation("/home")
+
+      // empty the data
+      setData({
+          first_name: "",
+          last_name: "",
+          email: "",
+          password: ""
+        });
+
+      }).catch(error => {
+          alert("Error Eeeeeekkkk")
+          console.log(error)
+      })
+
+  }
 
     return (
       <div>
@@ -30,7 +60,6 @@ function Login() {
           <ForgotPass onClick={() => setShow(!show)}></ForgotPass>
           </>
         ): null}
-        
         <body className='container'>
           {/*Black Container*/}
           <div className='blackContainer'>
@@ -38,7 +67,7 @@ function Login() {
               <div>
                 <div >
                     <h1 >WELCOME</h1>
-                    <h1 className='SEG'>SEG Prototype</h1>
+                    <h1 className='SEG'>GEMS Prototype</h1>
                 </div>
                 <div style={{marginTop: 20, marginBottom: 20}}>
                 <SignBtn
@@ -105,6 +134,13 @@ function Login() {
                     <div style={{marginTop: 20, marginBottom: 20}}>
                       <InputBox 
                       label="First Name"
+                      value={data.first_name}
+                      onChange={(e) => {
+                        setData({
+                          ...data, "first_name" : e.target.value
+                        })
+                      }}
+
                       InputProps={{ 
                         style: { 
                             border: 'none',
@@ -119,6 +155,12 @@ function Login() {
                     </div>
                     <div style={{marginTop: 20, marginBottom: 20}}>
                       <InputBox label="Last Name"
+                      value={data.last_name}
+                      onChange={(e) => {
+                        setData({
+                          ...data, "last_name" : e.target.value
+                        })
+                      }}
                       InputProps={{ 
                         style: { 
                             border: 'none',
@@ -135,6 +177,12 @@ function Login() {
                       <InputBox 
                       label="Email"
                       type="email"
+                      value={data.email}
+                      onChange={(e) => {
+                        setData({
+                          ...data, "email" : e.target.value
+                        })
+                      }}                      
                       InputProps={{ 
                         style: { 
                             border: 'none',
@@ -151,6 +199,12 @@ function Login() {
                       <InputBox 
                       label="Password"
                       type="password"
+                      value={data.password}
+                      onChange={(e) => {
+                        setData({
+                          ...data, "password" : e.target.value
+                        })
+                      }}                      
                       InputProps={{ 
                         style: { 
                             border: 'none',
@@ -165,7 +219,7 @@ function Login() {
                     </div>
                   </div>
                   <div style={{display:"flex", flexDirection:"column"}}>
-                      <Button onClick={() => navigation("/home")} className='SignUp' variant='contained'>Sign Up</Button> </div>
+                      <Button onClick={handleRegistration} className='SignUp' variant='contained'>Sign Up</Button> </div>
                 </div>
                 }
 
